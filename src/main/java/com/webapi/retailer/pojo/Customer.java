@@ -1,10 +1,12 @@
 package com.webapi.retailer.pojo;
 
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -16,15 +18,14 @@ public class Customer {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
 
-    @Column
+    @NotNull
     private String username;
 
-    @Column
+    @NotNull
     private String pwd;
 
-    @Column
+    @ElementCollection(targetClass=Integer.class)
     private List<Long> purchaseId;
 
-    @Column
     private int points;
 }

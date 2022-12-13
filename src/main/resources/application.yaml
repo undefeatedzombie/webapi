@@ -1,0 +1,9 @@
+server:
+  port: 8080
+
+logging:
+  file:
+    name: log/log.log
+  level:
+    root: info
+    com.webapi.retailer: debug

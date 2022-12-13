@@ -8,5 +8,4 @@ import java.math.BigDecimal;
 
 @Repository
 public interface PurchaseDao extends JpaRepository<Purchase,Long> {
-    public Purchase savePurchase(BigDecimal value);
 }

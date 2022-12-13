@@ -1,5 +1,7 @@
 package com.webapi.retailer.service;
 
+import com.webapi.retailer.exception.CustomerNotFoundException;
+import com.webapi.retailer.exception.PurchaseNotFoundException;
 import com.webapi.retailer.pojo.Customer;
 import com.webapi.retailer.pojo.Purchase;
 import com.webapi.retailer.pojo.TransactionRecord;
@@ -17,7 +19,7 @@ public interface TransactionRecordService {
 
     public TransactionRecord saveTransactionRecord(TransactionRecord transactionRecord);
 
-    public HashMap<Customer,BigDecimal> calculatePoints(List<TransactionRecord> records);
+    public HashMap<Customer,BigDecimal> calculatePoints(List<TransactionRecord> records) throws PurchaseNotFoundException, CustomerNotFoundException;
 
 
 

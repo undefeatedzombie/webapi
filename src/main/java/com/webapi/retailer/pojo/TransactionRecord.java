@@ -1,7 +1,12 @@
 package com.webapi.retailer.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,11 +19,14 @@ import java.util.HashMap;
 @NoArgsConstructor
 public class TransactionRecord {
     @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
 
-    @Column
+
+    @NotNull
     private long customerId;
 
-    @Column
+
+    @NotNull
     private long purchaseId;
 }

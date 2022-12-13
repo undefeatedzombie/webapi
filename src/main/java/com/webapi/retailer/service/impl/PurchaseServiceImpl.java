@@ -1,6 +1,7 @@
 package com.webapi.retailer.service.impl;
 
 import com.webapi.retailer.dao.PurchaseDao;
+import com.webapi.retailer.exception.PurchaseNotFoundException;
 import com.webapi.retailer.pojo.Customer;
 import com.webapi.retailer.pojo.Purchase;
 import com.webapi.retailer.service.PurchaseService;
@@ -27,8 +28,12 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public Purchase findPurchaseById(long id) {
-        return purchaseDao.findById(id).orElseThrow(()->new RuntimeException("No Record of Purchase"));
+    public Purchase findPurchaseById(long id) throws PurchaseNotFoundException {
+        Optional<Purchase> purchase = purchaseDao.findById(id);
+        if(!purchase.isPresent()){
+            throw new PurchaseNotFoundException("No Record of Purchase");
+        }
+        return purchase.get();
     }
 
     @Override
@@ -37,10 +42,10 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public Purchase updatePurchaseById(long id, Purchase purchase) {
+    public Purchase updatePurchaseById(long id, Purchase purchase) throws PurchaseNotFoundException {
         Optional<Purchase> target = purchaseDao.findById(id);
         if(!target.isPresent()){
-            throw new RuntimeException("No Such Record");
+            throw new PurchaseNotFoundException("No Record of Purchase");
         }
         purchase.setId(id);
         return savePurchase(purchase);
@@ -53,6 +58,8 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public Purchase savePurchase(BigDecimal value) {
-        return purchaseDao.savePurchase(value);
+        Purchase p = new Purchase();
+        p.setValue(value);
+        return savePurchase(p);
     }
 }

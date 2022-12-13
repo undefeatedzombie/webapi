@@ -2,6 +2,8 @@ package com.webapi.retailer.service.impl;
 
 import com.webapi.retailer.dao.CustomerDao;
 import com.webapi.retailer.dao.PurchaseDao;
+import com.webapi.retailer.exception.CustomerNotFoundException;
+import com.webapi.retailer.exception.PurchaseNotFoundException;
 import com.webapi.retailer.pojo.Customer;
 import com.webapi.retailer.pojo.Purchase;
 import com.webapi.retailer.service.CustomerService;
@@ -27,9 +29,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void addPoints(long customerId, long purchaseId) {
+    public void addPoints(long customerId, long purchaseId) throws CustomerNotFoundException, PurchaseNotFoundException {
         Customer customer = findCustomerById(customerId);
         Purchase purchase = purchaseService.findPurchaseById(purchaseId);
+        // calculate the points based on the requirement
         BigDecimal value = purchase.getValue();
         int total = value.intValue();
         int points = 0;
@@ -44,20 +47,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Purchase checkOut(long cid,BigDecimal value) {
+    public Purchase checkOut(long cid,BigDecimal value) throws CustomerNotFoundException, PurchaseNotFoundException {
         Purchase purchase = purchaseService.savePurchase(value);
-        int total = value.intValue();
-        int points = 0;
-        if(total > 100){
-            points += (total - 100) * 2;
-            total = 100;
-        }
-        if(total > 50){
-            points += total - 50;
-        }
-        Customer customer = customerDao.findById(cid).get();
-        customer.setPoints(customer.getPoints() + points);
-        updateCustomerById(cid,customer);
+        //calculate points for the customer by calling add points method
+        addPoints(cid,purchase.getId());
+        //update customer info in the database
+        updateCustomerById(cid,this.findCustomerById(cid));
         return purchase;
     }
 
@@ -68,13 +63,21 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer findCustomerById(long id) {
-        return customerDao.findById(id).orElseThrow(()->new RuntimeException("No Such Customer"));
+    public Customer findCustomerById(long id) throws CustomerNotFoundException {
+        Optional<Customer> byId = customerDao.findById(id);
+        if(!byId.isPresent()){
+            throw new CustomerNotFoundException("No Such Customer");
+        }
+        return byId.get();
     }
 
     @Override
-    public Customer findCustomerByUsernameAndPwd(String username, String pwd) {
-        return customerDao.findByUsernameAndPwd(username,pwd).orElseThrow(()->new RuntimeException("Wrong Information, please try again"));
+    public Customer findCustomerByUsernameAndPwd(String username, String pwd) throws CustomerNotFoundException {
+        Optional<Customer> customer = customerDao.findByUsernameAndPwd(username,pwd);
+        if(!customer.isPresent()){
+            throw new CustomerNotFoundException("No Such Customer");
+        }
+        return customer.get();
     }
 
     @Override
@@ -83,10 +86,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer updateCustomerById(long id, Customer customer) {
-        Optional<Customer> target = customerDao.findById(id);
-        if(!target.isPresent()){
-            throw new RuntimeException("No Such Customer");
+    public Customer updateCustomerById(long id, Customer customer) throws CustomerNotFoundException {
+        Optional<Customer> byId = customerDao.findById(id);
+        if(!byId.isPresent()){
+            throw new CustomerNotFoundException("No Such Customer");
         }
         customer.setId(id);
         return saveCustomer(customer);
