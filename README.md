@@ -18,13 +18,13 @@ RestFul APIs for Transaction: method: calculatePoints
 [CustomerController](https://github.com/undefeatedzombie/webapi/blob/main/src/main/java/com/webapi/retailer/controller/CustomerController.java)
 1. Given a list of transactions, return a HashMap that uses customer as primary key and the points of each customer as value. Do the addpoints method while loop through the list of transactions.
 
-Input validations and customized exceptions to handle invalid use cases[exceptions](https://github.com/undefeatedzombie/webapi/tree/main/src/main/java/com/webapi/retailer/exception)
+Input validations and customized exceptions to handle invalid use cases [exceptions](https://github.com/undefeatedzombie/webapi/tree/main/src/main/java/com/webapi/retailer/exception)
 1. CustomerNotFoundException: throws out this exception in case of invalid use cases regarding to the customer.
 2. PurchaseNotFoundException：throws out this exception in case of invalid use cases regarding to the purchase.
 3. InvalidInputException: throws out this exception in case of invalid input in the controller, (id does not meet the requirement or null value)
-4. Global exception handler[advice](https://github.com/undefeatedzombie/webapi/tree/main/src/main/java/com/webapi/retailer/advice)
+4. Global exception handler [advice] (https://github.com/undefeatedzombie/webapi/tree/main/src/main/java/com/webapi/retailer/advice)
 5.
-Unit tests to make sure the API is runnable[Unit Test](https://github.com/undefeatedzombie/webapi/blob/main/src/test/java/com/webapi/retailer/RetailerApplicationTests.java)
+Unit tests to make sure the API is runnable [Unit Test](https://github.com/undefeatedzombie/webapi/blob/main/src/test/java/com/webapi/retailer/RetailerApplicationTests.java)
 RetailerApplicationTests uses Junit and Mockito to perform unit test to the business logic of the back end.
 
 Performance test is needed in the next step
