@@ -114,7 +114,15 @@ public ResponseEntity<String> deletePurchaseById(@PathVariable("id") long id) th
 RestFul APIs for Transaction: method: calculatePoints
 [CustomerController](https://github.com/undefeatedzombie/webapi/blob/main/src/main/java/com/webapi/retailer/controller/CustomerController.java)
 1. Given a list of transactions, return a HashMap that uses customer as primary key and the points of each customer as value. Do the addpoints method while loop through the list of transactions.
-
+```
+@GetMapping("points")
+public HashMap<Customer, BigDecimal> calculatePoints(@RequestBody List<TransactionRecord> records) throws Exception{
+    if(records == null){
+        throw new InvalidInputException("Empty Request Body");
+    }
+    return transactionRecordService.calculatePoints(records);
+}
+```
 Input validations and customized exceptions to handle invalid use cases [exceptions](https://github.com/undefeatedzombie/webapi/tree/main/src/main/java/com/webapi/retailer/exception)
 1. CustomerNotFoundException: throws out this exception in case of invalid use cases regarding to the customer.
 2. PurchaseNotFoundException：throws out this exception in case of invalid use cases regarding to the purchase.
